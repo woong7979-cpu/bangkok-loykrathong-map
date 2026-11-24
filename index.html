@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>러이끄라통 방콕 지도</title>
+<meta name="description" content="방콕 러이끄라통 행사장·공원 지도와 가까운 BTS·MRT·선착장 안내">
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=Noto+Sans+KR:wght@400;500;700;800&family=Noto+Sans+Thai:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* VOICE: 동네 여행안내소에서 건네받은 손그림 지도처럼, 따뜻하고 정갈하게
+   IDEA: 금빛 까녹 문양 테두리를 두른 태국 전통 관광지도
+   PICTURE: 첫 화면 한가운데 한눈에 들어오는 방콕 지도(강·사원·요새·배·끄라통)
+   COLOUR and TYPE: 크림 양피지, 왕실 남색, 금색, 청록·테라코타 / Gowun Batang + Noto Sans KR·Thai
+   LAYOUT: 모바일 우선 — 제목, 지도, 장소 칩, 상세, 목록, 팁 / 넓은 화면은 지도 왼쪽 고정 */
+:root{color-scheme:light;
+--bg:#f4ead3;--paper:#fbf5e6;--ink:#3a2a1a;--mut:#7a6648;--line:#d9c69a;--gold:#b48a2c;--navy:#1d3570;--teal:#1c6b6f;--terra:#b5532c;--green:#4e7a36;
+--m-land:#f3e6c6;--m-dot:#e6d4a8;--m-frame:#1d3570;--m-gold:#c99a35;--m-park:#b9cf94;--m-tree:#5a8a45;--m-tree2:#86b36b;--m-road:#fbf3de;--m-water:#8cc3d4;--m-water-edge:#6aa9bd;
+--m-bts:#7fa77a;--m-mrt:#7d8fb8;--m-goldline:#c9a94e;--m-ink:#3a2a1a;--m-ink2:#6b573a;--m-district:#a58a5a;--m-bldg:#cdbd98;--m-bldg2:#b9a77f;--m-card:#fbf5e6;--m-banner:#1d3570;--m-bannerink:#f3cf6b;--m-accent:#b5532c;
+--p-city:#1c6b6f;--p-river:#b5532c;--p-park:#4e7a36}
+*{box-sizing:border-box;min-width:0}
+html{scroll-padding-top:12px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "Noto Sans KR","Noto Sans Thai",sans-serif;overflow-x:clip;word-break:keep-all;overflow-wrap:break-word;padding-bottom:calc(84px + env(safe-area-inset-bottom))}
+.wrap{max-width:1240px;margin:0 auto;padding:0 max(14px,env(safe-area-inset-left))}
+header{padding:14px 2px 12px;display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:12px;align-items:center}
+header h1{grid-column:1/-1}
+.eyebrow{margin:0;font:600 clamp(11px,3.3vw,14px)/1.3 "Noto Sans Thai","Noto Sans KR",sans-serif;color:var(--terra);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+h1{font:700 clamp(20px,6.5vw,44px)/1.15 "Gowun Batang","Noto Sans Thai",serif;margin:8px 0 0;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.switch{flex:none;font-size:14px;color:var(--navy);border:1px solid var(--line);background:var(--paper);border-radius:10px;padding:9px 12px;text-decoration:none;font-weight:600}
+.grid{display:grid;gap:16px}
+.mapbox{border-radius:6px;overflow:hidden;box-shadow:0 2px 0 var(--line),0 12px 28px rgba(80,55,15,.18);background:var(--m-land)}
+.mapbox svg{display:block;width:100%;height:auto}
+.pin{cursor:pointer}.pin:focus{outline:none}.pin:focus-visible path{stroke:#ffd47a;stroke-width:8}
+.dot{flex:none;display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;font:800 13px/1 "Noto Sans KR",sans-serif;font-style:normal;color:#fff;border:2px solid var(--gold)}
+.c-city{background:var(--teal)}.c-etc{background:#8a6d4a}.c-river{background:var(--terra)}.c-park{background:var(--green)}
+.panel{background:var(--paper);border:1px solid var(--line);outline:1px solid var(--line);outline-offset:-6px;border-radius:4px;padding:20px 18px}
+.from label{display:block;font-weight:700;font-size:15px;margin-bottom:6px}
+.frow{display:flex;gap:8px}
+input{flex:1;font:16px "Noto Sans KR",sans-serif;min-height:48px;padding:0 14px;border-radius:8px;border:1px solid var(--line);background:#fff;color:var(--ink)}
+.ghost{min-height:48px;padding:0 14px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--mut);font:600 15px "Noto Sans KR",sans-serif;cursor:pointer}
+.hint{font-size:13px;color:var(--mut);margin:6px 0 0}
+.kicker{display:flex;gap:8px;align-items:center;margin:0 0 6px;font-size:14px;color:var(--mut);font-weight:600}
+.detail h2{font:700 26px/1.2 "Gowun Batang","Noto Sans Thai",serif;margin:0;color:var(--navy);text-wrap:balance}
+.th{margin:4px 0 12px;color:var(--mut);font:15px "Noto Sans Thai","Noto Sans KR",sans-serif}
+.when{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 12px}
+.when div{background:var(--bg);border-radius:6px;padding:8px 12px}
+.when dt{font-size:12px;color:var(--mut)}.when dd{margin:0;font-weight:700;line-height:1.35}
+.detail p{margin:0 0 10px}.more{font-size:14px;color:var(--mut)}
+.detail h3{font:700 17px "Gowun Batang","Noto Sans Thai",serif;color:var(--navy);margin:16px 0 8px;padding-top:12px;border-top:1px dashed var(--line)}
+.trs{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.trs li{display:flex;gap:10px;align-items:flex-start}
+.tr{flex:none;min-width:44px;text-align:center;font:700 12px/22px "Noto Sans KR",sans-serif;border-radius:5px;color:#fff;margin-top:1px}
+.tr-BTS{background:#5f8f5a}.tr-MRT{background:#4c64a3}.tr-GOLD{background:#b08a2e}.tr-BOAT{background:#d27a2c}.tr-BUS{background:#8a6d4a}
+.src{font-size:13px;color:var(--mut);margin:14px 0 12px!important}.src.warn{color:var(--terra)}
+.acts{display:flex;flex-wrap:wrap;gap:8px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 16px;border-radius:8px;border:1px solid var(--line);background:#fff;color:var(--ink);text-decoration:none;font-weight:700;font-size:15px}
+.btn.pri{background:var(--navy);border-color:var(--navy);color:#f3cf6b}
+.sec h2{font:700 22px "Gowun Batang","Noto Sans Thai",serif;color:var(--navy);margin:0 0 4px}
+.lh{font-size:14px;color:var(--mut);margin:16px 0 6px;font-weight:700}
+.row{width:100%;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;text-align:start;padding:10px 4px;border:0;border-bottom:1px solid var(--line);background:none;color:var(--ink);font:inherit;cursor:pointer;min-height:56px}
+.row.on{background:rgba(180,138,44,.12)}
+.row b{display:block;font-size:15px}.row small{display:block;color:var(--mut);font-size:13px;line-height:1.4}
+.row em{font-style:normal;font-size:13px;text-align:end;color:var(--mut);max-width:42vw;line-height:1.4}
+.tips{margin:0;padding-inline-start:20px}.tips li{margin:6px 0}
+.annual{font-size:14px;color:var(--mut)}
+footer{padding:22px 2px 28px;font-size:13px;color:var(--mut)}
+footer .mail{display:inline-block;margin:6px 0 10px;font-size:16px;font-weight:700;color:var(--navy)}
+footer a{color:inherit}
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:5;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(244,234,211,.94);backdrop-filter:blur(6px);border-top:1px solid var(--line)}
+.bar .btn{min-height:50px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.from{background:var(--bg);border-radius:6px;padding:12px;margin-bottom:4px}
+.from input{background:#fff}
+.row{border-radius:4px}
+.row.on{background:var(--navy);color:#fff;border-bottom-color:var(--navy)}
+.row.on small,.row.on em{color:#e9dcb8}
+.row[aria-expanded=false]:hover{background:rgba(180,138,44,.12)}
+.detail{border:1px solid var(--line);border-top:0;background:#fffdf7;padding:18px 16px 18px;margin:0 0 10px;border-radius:0 0 6px 6px;scroll-margin-top:12px}
+.detail h2{font:700 26px/1.2 "Gowun Batang","Noto Sans Thai",serif;margin:0;color:var(--navy);text-wrap:balance}
+.detail p{margin:0 0 10px}
+.detail h3{font:700 17px "Gowun Batang","Noto Sans Thai",serif;color:var(--navy);margin:16px 0 8px;padding-top:12px;border-top:1px dashed var(--line)}
+.bar[hidden]{display:none}
+.lang{flex:none;display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--paper)}
+.lang button{min-height:30px;min-width:34px;padding:0 7px;border:0;background:transparent;color:var(--navy);font:700 12px "Noto Sans KR","Noto Sans Thai",sans-serif;cursor:pointer}
+.lang button+button{border-left:1px solid var(--line)}
+.lang button[aria-pressed=true]{background:var(--navy);color:#f3cf6b}
+.etcbox{border-color:#cdb27a}
+.pics{display:grid;grid-template-columns:1fr 1fr;gap:6px;max-width:360px;margin:4px 0 12px}
+.pics img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;border-radius:6px;border:1px solid var(--line);background:var(--bg)}
+.detail .picnote{font-size:11.5px;color:var(--mut);margin:0 0 4px}
+.mapinfo{margin-top:12px;scroll-margin-top:10px}
+.mapinfo .detail{border:0;padding:0;margin:0;background:none}
+.mapinfo .empty{margin:0;color:var(--mut);font-size:14px;text-align:center}
+.mapinfo .x{float:right;min-width:44px;min-height:44px;margin:-10px -8px 0 8px;border:0;background:none;color:var(--mut);font-size:24px;cursor:pointer}
+.sechead{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.toggle{min-height:40px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--bg);color:var(--navy);font:700 14px "Noto Sans KR","Noto Sans Thai",sans-serif;cursor:pointer;white-space:nowrap}
+.row.sub{min-height:46px;padding:8px 4px}
+.row.sub b{font-size:15px}
+.etcbox h2{margin-bottom:4px}
+@keyframes glow{0%,100%{opacity:.5}50%{opacity:1}}.flame{animation:glow 2.8s ease-in-out infinite}
+@media(prefers-reduced-motion:reduce){.flame{animation:none}}
+@media(min-width:960px){
+ body{padding-bottom:0}.bar{display:none}
+ .grid{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);align-items:start;gap:24px}
+ .left{position:sticky;top:14px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <p class="eyebrow">ลอยกระทง · <span data-i="date"></span></p>
+  <div class="lang" role="group" aria-label="Language">
+    <button type="button" data-lang="ko" aria-pressed="true">한국어</button><button type="button" data-lang="en" aria-pressed="false">EN</button><button type="button" data-lang="th" aria-pressed="false" lang="th">ไทย</button>
+  </div>
+  <h1 data-i="title">방콕 러이끄라통 지도</h1>
+</header>
+
+<div class="grid">
+ <div class="left">
+  <div class="mapbox"><svg id="map" viewBox="0 0 1000 1238" role="img"></svg></div>
+  <section class="panel mapinfo" id="mapinfo" aria-live="polite"></section>
+ </div>
+ <div class="grid" style="grid-template-columns:minmax(0,1fr);gap:16px">
+  <section class="panel sec">
+    <div class="sechead"><h2 data-i="allPlaces">모든 장소</h2><button type="button" class="toggle" id="toggleAll" aria-expanded="false" aria-controls="list"></button></div>
+    <p class="hint" style="margin:0 0 10px" data-i="allHint"></p>
+    <div class="from">
+      <label for="from" data-i="fromLabel">출발지 (선택)</label>
+      <div class="frow"><input id="from" autocomplete="off"><button class="ghost" id="clear" type="button" data-i="clear">지우기</button></div>
+      <p class="hint" id="fromNote"></p>
+    </div>
+    <div id="list" hidden></div>
+  </section>
+  <section class="panel sec etcbox">
+    <h2 data-i="etcTitle">기타 행사</h2>
+    <div id="etc"></div>
+  </section>
+  <section class="panel sec">
+   <h2 data-i="tipsTitle">띄우기 전에</h2>
+   <ul class="tips" id="tips"></ul>
+   <p class="annual"><span data-i="annual"></span><b data-i="next"></b></p>
+  </section>
+ </div>
+</div>
+
+<footer>
+  <div data-i="contact">문의</div>
+  <a class="mail" href="mailto:woong7979@gmail.com">woong7979@gmail.com</a>
+  <p><span data-i="sources">출처</span>: BMA — <a href="https://www.nationthailand.com/thailand/bangkok/40073477">Nation Thailand</a> · <a href="https://www.nationthailand.com/news/40072970">Nation Thailand</a>, <a href="https://www.tatnews.org/2026/11/loi-krathong-2026-lights-up-thailands-rivers-and-historic-cities/">TAT News</a>, <a href="https://www.naewna.com/n/?p=167064">Naewna</a>, <a href="https://www.pptvhd36.com/news/%E0%B9%84%E0%B8%A5%E0%B8%9F%E0%B9%8C%E0%B8%AA%E0%B9%84%E0%B8%95%E0%B8%A5%E0%B9%8C/286986">PPTV</a>, <a href="https://www.thansettakij.com/lifestyle/travel-shopping/673777">Thansettakij</a>, Instagram @unemployed_in_thailand, Google Maps. <span data-i="mapNote"></span></p>
+</footer>
+</div>
+<nav class="bar" id="bar" aria-label="Directions" hidden></nav>
+<script src="i18n.js"></script>
+<script src="app.js"></script>
+<script>LK.init({ornate:true})</script>
+</body>
+</html>
