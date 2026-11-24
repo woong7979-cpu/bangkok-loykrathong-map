@@ -1,7 +1,9 @@
 # 행사 지도 사이트 작성 매뉴얼 — 방콕 러이끄라통 2026 편
 
 작성: 2026.11.24 · 문의 woong7979@gmail.com
-온라인 페이지: https://claude.ai/artifact/DJN3kSwdQe7gviqfXG3Dob
+**배포 주소: https://bangkok-loykrathong-map.vercel.app**  
+GitHub: https://github.com/woong7979-cpu/bangkok-loykrathong-map  
+미리보기(Claude): https://claude.ai/artifact/DJN3kSwdQe7gviqfXG3Dob
 **이 구조는 송끄란, 크리스마스·새해 카운트다운, 지역 축제 등 다른 행사에도 그대로 재사용할 수 있게 만들었습니다(8장).**
 
 ---
@@ -74,8 +76,7 @@
 │  ├─ app.js       행사 데이터(한국어 원문) + 지도 그리기 + 화면 동작
 │  ├─ i18n.js      영어·태국어 번역 + 화면 고정 문구 3개 언어
 │  └─ img/         장소별 분위기 사진 (id_1.jpg, id_2.jpg · 가로 480px)
-├─ 참고사진/                       ← 사진 원본 (번호_장소명_1/2.jpg)
-└─ v1_초안/                         ← 참고용 첫 버전 (The Met 출발 기준)
+└─ 참고사진/                       ← 사진 원본 (번호_장소명_1/2.jpg, GitHub에는 올리지 않음)
 ```
 
 - 세 파일과 img 폴더는 **반드시 같은 폴더**에. index.html이 i18n.js → app.js 순서로 불러옵니다.
@@ -194,11 +195,14 @@ VT:{ en:{ mahakan:{name:'Mahakan Fort', today:'18:00 opening ceremony', desc:'�
 - 색은 index.html 상단 `:root{ … }` 변수(--navy, --gold, --m-water, --p-city 등)만 바꾸면 전체 반영
 - (관광청 스타일 modern.html은 11/24 검토 후 삭제)
 
-## 6. 배포 (Vercel 예시)
+## 6. 배포 (GitHub → Vercel, 2026.11.24 완료)
 
-1. `v2_최종` 폴더의 3개 파일을 그대로 올림 (서버·빌드 설정 없음)
-2. vercel.com → Add New → Project → 폴더 업로드(또는 GitHub 저장소 연결)
-- Netlify Drop, GitHub Pages도 폴더째 올리면 됨
+- GitHub 저장소: `woong7979-cpu/bangkok-loykrathong-map` (공개, main 브랜치) — 루트에 index.html·app.js·i18n.js·img/·README.md·MANUAL.md
+- Vercel 프로젝트: `bangkok-loykrathong-map` (woong7979-cpu's projects, Hobby, 프리셋 Other, 빌드 없음)
+- 주소: https://bangkok-loykrathong-map.vercel.app
+- **수정 반영**: GitHub main 에 파일을 올리면(push) Vercel이 1분 안에 자동 재배포
+- 새 행사도 같은 순서: GitHub 새 저장소 만들기(직접 ‘Create repository’ 클릭) → 파일 push → vercel.com/new 에서 저장소 Import → Deploy
+- 참고사진 원본은 용량 때문에 저장소에 넣지 않음
 
 ## 7. 자주 묻는 것
 
@@ -232,3 +236,4 @@ VT:{ en:{ mahakan:{name:'Mahakan Fort', today:'18:00 opening ceremony', desc:'�
 - v2.6 (08:55): 제목 한 줄 고정, 지도 번호 클릭 시 지도 바로 아래에 안내 표시, ‘모든 장소’ 목록 기본 접힘(펼치기/접기)
 - v2.7 (09:00): 날짜 줄 한 줄, 언어 버튼 작게, 기본 언어 항상 한국어, 모든 장소 목록 기본 펼침(지도 클릭 안내는 지도 아래 + 목록은 그 밑에)
 - v2.8 (09:00): 서브 이벤트 줄을 이름만 남기고 보조 글씨·안내 문구 삭제, 매뉴얼 0장 ‘확정된 제작 원칙’(메인/서브, 배치, 칸 줄이기, 3개 국어, 태국 톤·글꼴, 요청 예시) 신설
+- v2.9 (09:05): 초안 폴더 삭제, GitHub 저장소 생성·push, Vercel 배포(bangkok-loykrathong-map.vercel.app)
